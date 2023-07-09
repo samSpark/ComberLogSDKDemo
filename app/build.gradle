@@ -1,0 +1,60 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+android {
+    namespace 'com.u2020.reporter'
+    compileSdk 33
+ 
+    defaultConfig {
+        applicationId "com.u2020.reporter"
+        minSdk 17
+       //noinspection ExpiredTargetSdkVersion,OldTargetApi
+        targetSdk 28 //非必要targetSdkVersion请不要超过28！！！
+        versionCode 4
+        versionName "1.3.1"
+       testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+//        ndk {//ComberLog支持的abiFilters。请根据实际情况添加！！！
+//            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86'
+//        }
+    }
+    packagingOptions {
+        doNotStrip "*/armeabi-v7a/*.so"
+        doNotStrip "*/x86/*.so"
+        doNotStrip "*/arm64-v8a/*.so"
+        doNotStrip "*/x86_64/*.so"
+        doNotStrip "armeabi.so"
+    }
+    signingConfigs {
+        release {
+            storeFile file("../demo.keystore")
+            storePassword '111111'
+            keyAlias 'demo'
+            keyPassword '111111'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+ 
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation files('libs/comberlog_1.3.1_stable_2022030818.aar')
+    //debugImplementation because LeakCanary and BlockCanary should only run in debug builds.
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'//可忽略
+}
